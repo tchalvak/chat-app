@@ -1,6 +1,6 @@
 
 deps:
-	composer install
+	#composer install
 
 run:
 	./app.py
@@ -10,7 +10,7 @@ install: install-db
 	flask/bin/pip install flask
 	flask/bin/pip install flask-httpauth
 	chmod ug+x app.py
-	composer install
+	#composer install
 
 
 
@@ -21,6 +21,7 @@ install-db:
 
 clean:
 	dropdb ca
+	rm -rf flask/
 
 test:
 	vendor/bin/phpunit

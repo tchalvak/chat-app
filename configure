@@ -1,0 +1,1 @@
+echo "DOMAIN=http://chat.local" >> CONFIG

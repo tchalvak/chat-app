@@ -1,4 +1,4 @@
-var base_api = '/chat/api/v1.0/';
+var base_api = 'http://127.0.0.1:5000/chat/api/v1.0/';
 var chat = chat || {};
 
 chat.api = function(url_extra, callback){
