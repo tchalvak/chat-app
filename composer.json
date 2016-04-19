@@ -24,6 +24,6 @@
         "phpunit/phpunit": "^5.3"
     },
     "config": {
-        "component-dir": "deploy/www/components/"
+        "component-dir": "www/components/"
     }
 }
