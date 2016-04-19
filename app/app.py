@@ -4,6 +4,13 @@ from flask import Flask, jsonify, abort, make_response, request, url_for, curren
 from flask.ext.httpauth import HTTPBasicAuth
 from functools import update_wrapper
 
+''' Simple Flask REST API
+    Sample urls:
+    http://api.chat.local/chat/api/v1.0/chats
+    http://api.chat.local/chat/api/v1.0/chats/1
+    http://api.chat.local/chat/api/v1.0/chats via post to create
+'''
+
 ''' Decorator to allow crossdomain access '''
 def crossdomain(origin=None, methods=None, headers=None,
                 max_age=21600, attach_to_all=True,
@@ -54,25 +61,20 @@ auth = HTTPBasicAuth()
 
 app = Flask(__name__)
 
-''' Simple Flask REST API
-    Sample urls:
-    http://127.0.0.1:5000/chat/api/v1.0/chats
-'''
-
-
-
 
 chats = [
     {
         'id': 1,
         'username': u'Roy',
         'chat': u'This is totally a chat yeah, really.',
+        'date_created': u'2016-04-10 17:58:33.645138-04',
         'done': False
     },
     {
         'id': 2,
         'username':u'Bob',
         'chat': u'Yes, I am glad you created this chat.  Definitely.',
+        'date_created': u'2016-04-19 17:58:33.645138-04',
         'done': False
     }
 ]
@@ -130,14 +132,17 @@ def update_chat(chat_id):
         abort(404)
     if not request.json:
         abort(400)
-    if 'title' in request.json and type(request.json['title']) != unicode:
+    if 'username' in request.json and type(request.json['username']) != unicode:
         abort(400)
-    if 'description' in request.json and type(request.json['description']) is not unicode:
+    if 'chat' in request.json and type(request.json['chat']) is not unicode:
+        abort(400)
+    if 'date_created' in request.json and type(request.json['date_created']) is not unicode:
         abort(400)
     if 'done' in request.json and type(request.json['done']) is not bool:
         abort(400)
-    chat[0]['title'] = request.json.get('title', chat[0]['title'])
-    chat[0]['description'] = request.json.get('description', chat[0]['description'])
+    chat[0]['username'] = request.json.get('username', chat[0]['username'])
+    chat[0]['chat'] = request.json.get('chat', chat[0]['chat'])
+    chat[0]['date_created'] = request.json.get('date_created', chat[0]['date_created'])
     chat[0]['done'] = request.json.get('done', chat[0]['done'])
     return jsonify({'chat': chat[0]})
 
@@ -159,5 +164,6 @@ def make_public_chat(chat):
             new_chat[field] = chat[field]
     return new_chat
 
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='api.chat.local', port=5000)

@@ -1,4 +1,14 @@
 server {
+    listen 80;
+    server_name api.chat.local;
+
+    location / {
+        include uwsgi_params;
+        uwsgi_pass unix:/srv/chat-app/conf/chat-app.sock;
+    }
+}
+
+server {
 	server_name chat.local;
 
 	root /srv/chat-app/www;
@@ -38,9 +48,17 @@ server {
         uwsgi_pass unix:/srv/chat-app/conf/chatapp_uwsgi.sock;
 	}
 
+	location /chat {
+        include uwsgi_params;
+        uwsgi_pass unix:/srv/chat-app/conf/chatapp_uwsgi.sock;
+	}
+
 	location / {
 		#default fallback of everything else block
-		try_files $uri @php;
+		try_files $uri @uwsgi;
+	}
+
+	location @uwsgi {
 	}
 
 	location @php {

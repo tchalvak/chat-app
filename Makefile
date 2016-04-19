@@ -1,16 +1,20 @@
 
+-include CONFIG
+
 deps: install
-	#no-op for now
+	#Just run full install until something else is needed
 
 install: init install-db
 	@virtualenv flask
 	@flask/bin/pip install flask
 	@flask/bin/pip install flask-httpauth
+	@flask/bin/pip install pytest
+	pip install uwsgi
 	chmod ug+x app.py
 	#composer install
 
 run:
-	./app.py
+	./app/app.py
 
 
 
@@ -20,13 +24,13 @@ init:
 
 
 install-db:
-	createdb ca
-	psql ca < sql/account_table.sql
-	psql ca < sql/chat_table.sql
+	createdb $(DB)
+	psql $(DB) < sql/account_table.sql
+	psql $(DB) < sql/chat_table.sql
 
 clean:
-	dropdb ca
+	dropdb $(DB)
 	rm -rf flask/
 
 test:
-	vendor/bin/phpunit
+	python3 -m pytest tests/

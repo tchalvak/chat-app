@@ -1,3 +1,4 @@
 /vendor/
 unclean/
 CONFIG
+flask/

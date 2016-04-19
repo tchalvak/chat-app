@@ -1,1 +1,4 @@
-echo "DOMAIN=http://chat.local" >> CONFIG
+echo "DOMAIN=http://chat.local/" >> CONFIG
+echo "DB=ca" >> CONFIG
+echo "API_DOMAIN=http://api.chat.local/" >> CONFIG
+echo "API_BASE=/chat/api/v1.0/" >> CONFIG
