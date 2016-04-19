@@ -2,7 +2,14 @@
 deps:
 	composer install
 
+run:
+	./app.py
+
 install: install-db
+	virtualenv flask
+	flask/bin/pip install flask
+	flask/bin/pip install flask-httpauth
+	chmod ug+x app.py
 	composer install
 
 
