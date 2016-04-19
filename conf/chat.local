@@ -1,0 +1,47 @@
+server {
+	server_name chat.local;
+
+	root /srv/chat-app/www;
+	charset utf-8;
+	#error_page 404 /404.html;
+	error_page 404 /404.php;
+
+	# redirect server error pages to the static page /50x.html
+	error_page 500 502 503 504 /50x.html;
+
+	# Just use generic nginx error pages for now
+	location = /50x.html {
+	    root /usr/share/nginx/html;
+	}
+
+    location = /favicon.ico {
+		try_files /dev_favicon.ico =404;
+	}
+
+	# Debugging on settings
+	log_not_found on;
+	#autoindex on;
+	rewrite_log on;
+	add_header X-uri "$uri";
+
+	location ~ ^/(js|css|images|files)/ {
+		expires 365d;
+		try_files $uri =404;
+	}
+
+	location = / {
+		index index.html;
+	}
+
+	location / {
+		#default fallback of everything else block
+		try_files $uri @php;
+	}
+
+	location @php {
+		fastcgi_param PHP_VALUE "session.cookie_domain=chat.local \n date.timezone=America/New_York \n default_charset=UTF-8 \n";
+		fastcgi_pass unix:/var/run/php5-fpm.sock;
+		fastcgi_param SCRIPT_FILENAME $document_root/front.php;
+		include fastcgi_params;
+	}
+}
