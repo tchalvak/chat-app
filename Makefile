@@ -1,21 +1,21 @@
 
-deps: init
+deps: install
+	#no-op for now
+
+install: init install-db
+	@virtualenv flask
+	@flask/bin/pip install flask
+	@flask/bin/pip install flask-httpauth
+	chmod ug+x app.py
 	#composer install
 
 run:
 	./app.py
 
-install: init install-db
-	git pull
-	virtualenv flask
-	flask/bin/pip install flask
-	flask/bin/pip install flask-httpauth
-	chmod ug+x app.py
-	#composer install
+
 
 init:
-	#pull latest from github as necessary
-	git pull
+	@git pull
 
 
 
