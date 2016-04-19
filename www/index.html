@@ -101,14 +101,15 @@
                             <div class='form-group'>
                                 <label for='chat'>
                                     <strong class='username'>Roy</strong>
-                                    <input name='chat' class='form-control' type='text' placeholder='Start chatting...'> <button type='button' class='btn btn-default'><i class="fa fa-play-circle"></i></button>
+                                    <input name='chat' class='form-control' type='text' maxlength=250 placeholder='Start chatting...'> <button type='submit' class='btn btn-default'><i class="fa fa-play-circle"></i></button>
+                                    <span class='chat-error error text-warning hidden' ></span>
                                 </label>
                             </div>
                         </form>
                     </div>
                     <div class='chat-output jumbotron'>
-                        <dl>
-                            <dd class='username'>Roy<dd><dt>Let's start chatting with some dummy text.<dt>
+                        <dl class='chat-output-list'>
+                            <dt class='username'>Roy<dt><dd>Let's start chatting with some dummy text.<dd>
                         </dl>
                     </div>
                 </div>

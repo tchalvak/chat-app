@@ -1,4 +1,6 @@
-var baseApi = 'http://api.chat.local/chat/api/v1.0/';
+var apiDomain = 'http://api.chat.local/'
+var apiVersion = 'chat/api/v1.0/';
+var baseApi = apiDomain + apiVersion;
 var chat = chat || {};
 
 var chatForm = '#chat-input-form';
@@ -17,70 +19,94 @@ chat.clear = function(){
   $(chatForm).find('input[name=chat]').val('');
 };
 
-chat.error = function(errorText){
-  // Add an error element 
-  var err = $("<span class='error'/>").text(errorText);
-  $(chatInput).closest('label').prepend(err);
-  // Append a label up the tree.
-};
-
-// Pull the chats since a point in time
-chat.update = function(last){
-  // Get chats from a certain point in time.
-  chat.api('chats/?from='+last, function(data){
-    chat.append(data); // Append the latest chats.
-  });
-};
-
-// Append any totally new chats
-chat.append = function(data){
-  // Loop through the chat data
-  var chats = [];
-  $.each( data, function( key, val ) {
-    chats.push( "<dd id='chat-" + key + "'>" + val.username + "</dd><dt>" + val.chat + "</dt>" );
-  });
-
-  $('.chat-output-list').append($(chats.join('')));
-};
-
 // initialize the chat area
 chat.init = function(){
+  $('.chat-output-list').remove();
   $( "<dl/>", {
     "class": "chat-output-list",
     html: ''
   }).appendTo( ".chat-output" );
 };
 
-// test some of the chat functionality
-chat.test = function(){
-  chat.error('test');
-  chat.clear();
-  chat.update();
-  chat.init();
-  var testChat = {
-        'id': 3,
-        'username':'William',
-        'chat': 'I, William, am putting up another chat entirely.',
-        'date_created': '2016-04-19 17:58:33.645138-04',
-        'done': false
-    };
-  var testChats = {
-    'chats':[testChat]
-    };
+chat.error = function(errorText){
+  // Pop in the error element.
+  var err = $(".chat-error").text(errorText).removeClass('hidden');
+};
 
-  chat.append(testChats);
+// Pull the chats since a point in time
+chat.update = function(since){
+  // Get chats since a certain point in time.
+  chat.api('chats/' + (since? '?since='+since : ''), function(data){
+    chat.append(data); // Append the latest chats.
+  });
+  return new Date().getTime(); // Return updated latest
+};
+
+// Append any totally new chats
+chat.append = function(data){
+  console.log(data);
+  // Loop through the chat data
+  var chats = [];
+  $.each( data.chats, function( key, val ) {
+    chats.push( "<dt id='chat-" + key + "' class='username'>" + val.username + "</dt><dd>" + val.chat + "</dd>" );
+  });
+
+  $('.chat-output-list').append($(chats.join('')));
 };
 
 chat.push = function(author, pass, text){
-  jQuery.getJSON(baseApi+chats, function(){
+  var nwChat = 
+  jQuery.post(baseApi+'chats', function(){
     chat.clear(); // Clear upon success
+    chat.update(chat.latest); // Update with newer chats
   }).fail(function(){
     chat.error('Sorry, there was a problem sending your chat message.');
   });
 };
 
+// test some of the chat functionality
+chat.test = function(){
+  chat.error('Simple test error!');
+  chat.clear();
+  //chat.update();
+  var testChats = {
+    'chats':[
+        {
+          'id': 3,
+          'username':'William',
+          'chat': 'I, William, am putting up another chat entirely.',
+          'date_created': '2016-04-18 17:58:33.645138-04',
+          'done': false
+        },
+        {
+          'id': 4,
+          'username':'William',
+          'chat': 'Another fake chat sent from William here!',
+          'date_created': '2016-04-19 17:58:33.645138-04',
+          'done': false
+        }
+      ]
+    };
+  chat.append(testChats);
+};
+
+// Standard domload
 jQuery(function($){
   chat.init();
-  chat.update();
-
+  //chat.update();
+  //chat.test();
+  chat.latest = chat.latest || null;
+  // Ideally we'd use websockets for the chat, but I'm going to long poll for now
+  (function poll() {
+    chat.latest = chat.update(chat.latest);
+    setTimeout(function(){
+      // Poll for chat updates
+      chat.latest = chat.update(chat.latest);
+    }, 6000);
+  })();
+  $(chatForm).submit(function(e){
+    // author, pass, text
+    chat.push('someAuthor', 'pass', $(chatInput).val());
+    e.preventDefault();
+  });
 });

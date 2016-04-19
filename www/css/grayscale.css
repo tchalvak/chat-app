@@ -378,10 +378,10 @@ body {
     font-size:larger;
 }
 
-.chat-output dd, .chat-output dt{
+.chat-output dt, .chat-output dd{
     display:inline-block;
 }
-.chat-output dt:after{
+.chat-output dd:after{
     content:'\A';
     white-space:pre;
 }
