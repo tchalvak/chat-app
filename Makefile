@@ -21,8 +21,8 @@ init:
 
 install-db:
 	createdb ca
-	psql ca < account_table.sql
-	psql ca < chat_table.sql
+	psql ca < sql/account_table.sql
+	psql ca < sql/chat_table.sql
 
 clean:
 	dropdb ca

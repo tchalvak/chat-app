@@ -36,7 +36,7 @@ make
 make install
 
 
-Run the api for the app on localhost
+Run the app for the api on localhost
 ##################
 
 make run
@@ -45,4 +45,22 @@ Browse to the site
 ##################
 
 http://chat.local/
+
+INCOMPLETE
+#################
+Sadly, I didn't get the full chat running, just mainly a basic dummy frunt-end for it.
+
+Still todo:
+- Pull chats from api.
+- Put/post chats into api.
+- Randomized username for api.
+
+You can run the standard
+
+    ./configure
+    make
+    make install
+
+Above to get the latest version of the code and run a more complete site.
+
 
