@@ -374,6 +374,10 @@ body {
 
 /* Personalized chat-app css */
 
+.chat-app{
+    font-size:larger;
+}
+
 .chat-output dd, .chat-output dt{
     display:inline-block;
 }
@@ -389,4 +393,10 @@ body {
 }
 .chat-output .username:after, .chat-input-area .username:after{
     content:"\003e";
+    margin-right:1rem;
+}
+
+.chat-output.jumbotron{
+    background-color:rgba(30, 30, 30, 0.7);
+    margin-top:3rem;
 }
