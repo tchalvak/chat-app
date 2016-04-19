@@ -10,7 +10,7 @@ install: init install-db
 	@flask/bin/pip install flask-httpauth
 	@flask/bin/pip install pytest
 	pip install uwsgi
-	chmod ug+x app.py
+	chmod ug+x app/app.py
 	#composer install
 
 run:
