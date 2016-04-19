@@ -14,3 +14,6 @@ install-db:
 
 clean:
 	dropdb ca
+
+test:
+	vendor/bin/phpunit
