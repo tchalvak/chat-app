@@ -1,0 +1,4 @@
+{
+  "test_api.py::TestApi::()::test_api_urls": true,
+  "test_api.py::TestApi::()::test_root_url_config_works": true
+}
