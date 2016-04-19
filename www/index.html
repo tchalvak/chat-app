@@ -96,9 +96,21 @@
             <div class="col-lg-8 col-lg-offset-2">
                 <h2>Chat</h2>
                 <div class='chat-app'>
-                    <dl>
-                        <dd>Roy<dd><dt>Let's start chatting with some dummy text.<dt>
-                    </dl>
+                    <div class='chat-input-area'>
+                        <form class='form-inline'>
+                            <div class='form-group'>
+                                <label for='chat'>
+                                    <strong class='username'>Roy</strong>
+                                    <input name='chat' class='form-control' type='text' placeholder='Start chatting...'> <button type='button' class='btn btn-default'><i class="fa fa-play-circle"></i></button>
+                                </label>
+                            </div>
+                        </form>
+                    </div>
+                    <div class='chat-output'>
+                        <dl>
+                            <dd class='username'>Roy<dd><dt>Let's start chatting with some dummy text.<dt>
+                        </dl>
+                    </div>
                 </div>
             </div>
         </div>

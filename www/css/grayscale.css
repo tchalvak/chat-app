@@ -371,3 +371,22 @@ img::-moz-selection {
 body {
     webkit-tap-highlight-color: rgba(255,255,255,.2);
 }
+
+/* Personalized chat-app css */
+
+.chat-output dd, .chat-output dt{
+    display:inline-block;
+}
+.chat-output dt:after{
+    content:'\A';
+    white-space:pre;
+}
+.chat-output .username, .chat-input-area .username{
+    font-weight:bold;color:#42dca3;
+}
+.chat-output .username:before, .chat-input-area .username:before{
+    content:"\003c";
+}
+.chat-output .username:after, .chat-input-area .username:after{
+    content:"\003e";
+}
