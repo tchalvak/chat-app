@@ -96,7 +96,7 @@ jQuery(function($){
   //chat.update();
   //chat.test();
   chat.latest = chat.latest || null;
-  // Ideally we'd use websockets for the chat, but I'm going to long poll for now
+  // Ideally we'd use websockets for the chat, but I'm going to poll for now
   (function poll() {
     chat.latest = chat.update(chat.latest);
     setTimeout(function(){
