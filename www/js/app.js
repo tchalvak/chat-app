@@ -22,7 +22,7 @@ chat.clear = function(){
 // initialize the chat area
 chat.init = function(){
   $('.chat-output-list').remove();
-  $( "<dl/>", {
+  $( "<ul/>", {
     "class": "chat-output-list",
     html: ''
   }).appendTo( ".chat-output" );
@@ -48,7 +48,7 @@ chat.append = function(data){
   // Loop through the chat data
   var chats = [];
   $.each( data.chats, function( key, val ) {
-    chats.push( "<dt id='chat-" + key + "' class='username'>" + val.username + "</dt><dd>" + val.chat + "</dd>" );
+    chats.push( "<li><strong id='chat-" + key + "' class='username'>" + val.username + "</strong><p>" + val.chat + "</p></li>" );
   });
 
   $('.chat-output-list').append($(chats.join('')));
@@ -93,8 +93,6 @@ chat.test = function(){
 // Standard domload
 jQuery(function($){
   chat.init();
-  //chat.update();
-  //chat.test();
   chat.latest = chat.latest || null;
   // Ideally we'd use websockets for the chat, but I'm going to poll for now
   (function poll() {

@@ -15,7 +15,7 @@ from dateutil import parser
 
 ''' Convert datetime string to object for comparisons '''
 def convert_date(datetime_data):
-    return datetime.strptime(datetime_data[:19], '%Y-%m-%d %H:%M:%S')
+    return datetime.strptime(datetime_data, '%Y-%m-%d %H:%M:%S')
 
 ''' Decorator to allow crossdomain access '''
 def crossdomain(origin=None, methods=None, headers=None,
@@ -72,13 +72,13 @@ chats = [
         'id': 1,
         'username': u'Roy',
         'chat': u'Hi, welcome to Stone Chat.  Just a friendly neighborhood chat.',
-        'date_created': u'2016-04-10 17:58:33.645138-04'
+        'date_created': u'2016-04-10 17:58:33'
     },
     {
         'id': 2,
         'username':u'Bob',
-        'chat': u'We\'ve seeded the chat with a bit of initial chats so you can see what to expect.',
-        'date_created': u'2016-04-19 17:58:33.645138-04'
+        'chat': u'We\'ve seeded the chat with a few initial chats so you can see what to expect.',
+        'date_created': u'2016-04-19 17:58:33'
     }
 ]
 
@@ -115,12 +115,13 @@ def not_found(error):
 @crossdomain(origin='*')
 #@auth.login_required
 def create_chat():
-    if not request.json or not 'username' in request.json:
+    if not request.json or not 'chat' in request.json:
         abort(400)
     chat = {
         'id': chats[-1]['id'] + 1,
         'username':request.json['username'],
-        'chat':request.json.get('chat', '')
+        'chat':request.json.get('chat', ''),
+        'date_created': datetime.date.today().strftime('%Y-%m-%d %H:%M:%S')
     }
     chats.append(chat)
     return jsonify({'chat': chat}), 201

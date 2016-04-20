@@ -378,13 +378,10 @@ body {
     font-size:larger;
 }
 
-.chat-output dt, .chat-output dd{
-    display:inline-block;
+.chat-output ul{
+    list-style-type:none;
 }
-.chat-output dd:after{
-    content:'\A';
-    white-space:pre;
-}
+
 .chat-output .username, .chat-input-area .username{
     font-weight:bold;color:#42dca3;
 }
