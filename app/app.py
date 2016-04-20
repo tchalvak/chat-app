@@ -15,7 +15,7 @@ from dateutil import parser
 
 ''' Convert datetime string to object for comparisons '''
 def convert_date(datetime_data):
-    return datetime.strptime(datetime_data, '%b %d %Y %I:%M%p')
+    return datetime.strptime(datetime_data[:19], '%Y-%m-%d %H:%M:%S')
 
 ''' Decorator to allow crossdomain access '''
 def crossdomain(origin=None, methods=None, headers=None,
@@ -106,14 +106,6 @@ def get_chats():
         latest_chats = [c for c in chats if convert_date(c['date_created']) > since_dt]
     return jsonify({'chats': [make_public_chat(chat) for chat in latest_chats]})
 
-@app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['GET', 'OPTIONS'])
-@crossdomain(origin='*')
-def get_chat(chat_id):
-    chat = [chat for chat in chats if chat['id'] == chat_id]
-    if len(chat) == 0:
-        abort(404)
-    return jsonify({'chat': chat[0]})
-
 @app.errorhandler(404)
 @crossdomain(origin='*')
 def not_found(error):
@@ -133,8 +125,17 @@ def create_chat():
     chats.append(chat)
     return jsonify({'chat': chat}), 201
 
+@app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['GET', 'OPTIONS'])
+@crossdomain(origin='*')
+def get_chat(chat_id):
+    chat = [chat for chat in chats if chat['id'] == chat_id]
+    if len(chat) == 0:
+        abort(404)
+    return jsonify({'chat': chat[0]})
+
 '''
-Comment out PUT and DELETE options as unneeded for now
+Comment out un-needed endpoints for now
+
 @app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['PUT'])
 @auth.login_required
 def update_chat(chat_id):
