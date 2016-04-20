@@ -2,26 +2,20 @@
 -include CONFIG
 
 deps: install
-	#Just run full install until something else is needed
+	#Just run full install until sudo is needed for install
 
-install: init install-db
+install: install-db
+	@git pull --ff-only
 	@virtualenv flask
 	@flask/bin/pip install flask
 	@flask/bin/pip install flask-httpauth
+	@flask/bin/pip install python-dateutil
 	@flask/bin/pip install pytest
-	pip install uwsgi
+	#pip install uwsgi
 	chmod ug+x app/app.py
-	#composer install
 
 run:
 	./app/app.py
-
-
-
-init:
-	@git pull
-
-
 
 install-db:
 	createdb $(DB)

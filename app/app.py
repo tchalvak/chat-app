@@ -3,6 +3,8 @@ from datetime import timedelta
 from flask import Flask, jsonify, abort, make_response, request, url_for, current_app
 from flask.ext.httpauth import HTTPBasicAuth
 from functools import update_wrapper
+from datetime import datetime
+from dateutil import parser
 
 ''' Simple Flask REST API
     Sample urls:
@@ -10,6 +12,10 @@ from functools import update_wrapper
     http://api.chat.local/chat/api/v1.0/chats/1
     http://api.chat.local/chat/api/v1.0/chats via post to create
 '''
+
+''' Convert datetime string to object for comparisons '''
+def convert_date(datetime_data):
+    return datetime.strptime(datetime_data, '%b %d %Y %I:%M%p')
 
 ''' Decorator to allow crossdomain access '''
 def crossdomain(origin=None, methods=None, headers=None,
@@ -58,24 +64,21 @@ def crossdomain(origin=None, methods=None, headers=None,
 
 
 auth = HTTPBasicAuth()
-
 app = Flask(__name__)
 
-
+# Initial dummy chats
 chats = [
     {
         'id': 1,
         'username': u'Roy',
-        'chat': u'This is totally a chat yeah, really.',
-        'date_created': u'2016-04-10 17:58:33.645138-04',
-        'done': False
+        'chat': u'Hi, welcome to Stone Chat.  Just a friendly neighborhood chat.',
+        'date_created': u'2016-04-10 17:58:33.645138-04'
     },
     {
         'id': 2,
         'username':u'Bob',
-        'chat': u'Yes, I am glad you created this chat.  Definitely.',
-        'date_created': u'2016-04-19 17:58:33.645138-04',
-        'done': False
+        'chat': u'We\'ve seeded the chat with a bit of initial chats so you can see what to expect.',
+        'date_created': u'2016-04-19 17:58:33.645138-04'
     }
 ]
 
@@ -95,7 +98,13 @@ def unauthorized():
 @app.route('/chat/api/v1.0/chats', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def get_chats():
-    return jsonify({'chats': [make_public_chat(chat) for chat in chats]})
+    since = request.args.get('since')
+    latest_chats = chats
+    if(since is not None and float(since) > 0):
+        since_dt = datetime.fromtimestamp(float(since)/1000.0)
+        #Filter out already retrieved chats
+        latest_chats = [c for c in chats if convert_date(c['date_created']) > since_dt]
+    return jsonify({'chats': [make_public_chat(chat) for chat in latest_chats]})
 
 @app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
@@ -106,24 +115,26 @@ def get_chat(chat_id):
     return jsonify({'chat': chat[0]})
 
 @app.errorhandler(404)
+@crossdomain(origin='*')
 def not_found(error):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 @app.route('/chat/api/v1.0/chats', methods=['POST'])
 @crossdomain(origin='*')
-@auth.login_required
+#@auth.login_required
 def create_chat():
-    if not request.json or not 'title' in request.json:
+    if not request.json or not 'username' in request.json:
         abort(400)
     chat = {
         'id': chats[-1]['id'] + 1,
         'username':request.json['username'],
-        'chat':request.json.get('chat', ''),
-        'done': False
+        'chat':request.json.get('chat', '')
     }
     chats.append(chat)
     return jsonify({'chat': chat}), 201
 
+'''
+Comment out PUT and DELETE options as unneeded for now
 @app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['PUT'])
 @auth.login_required
 def update_chat(chat_id):
@@ -136,14 +147,15 @@ def update_chat(chat_id):
         abort(400)
     if 'chat' in request.json and type(request.json['chat']) is not unicode:
         abort(400)
-    if 'date_created' in request.json and type(request.json['date_created']) is not unicode:
+    if ('date_created' in request.json and 
+        type(request.json['date_created']) is not unicode and
+        datetime.strptime(request.json['date_created']) > 0
+        ):
         abort(400)
-    if 'done' in request.json and type(request.json['done']) is not bool:
-        abort(400)
+    #new data or fallback to existing
     chat[0]['username'] = request.json.get('username', chat[0]['username'])
     chat[0]['chat'] = request.json.get('chat', chat[0]['chat'])
-    chat[0]['date_created'] = request.json.get('date_created', chat[0]['date_created'])
-    chat[0]['done'] = request.json.get('done', chat[0]['done'])
+    chat[0]['date_created'] = datetime.strptime(request.json.get('date_created')) || chat[0]['date_created']
     return jsonify({'chat': chat[0]})
 
 @app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['DELETE'])
@@ -154,6 +166,7 @@ def delete_chat(chat_id):
         abort(404)
     chats.remove(chat[0])
     return jsonify({'result': True})
+'''
 
 def make_public_chat(chat):
     new_chat = {}
@@ -166,4 +179,4 @@ def make_public_chat(chat):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='api.chat.local', port=5000)
+    app.run(debug=True, host='localhost', port=5000)

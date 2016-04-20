@@ -20,15 +20,17 @@ You can configure the site http://chat.local by using the nginx conf file at ./c
 
 ### Configure
 
-Make ./configure runnable, then run it, it just creates the config file.
+Make ./configure executable, then run it, it just creates the `CONFIG` file.
 
     sudo chmod ug+x ./configure
     ./configure
 
+Modify CONFIG as suits you.
+
 ### Make
 
 
-The app will `createdb ca` to create a new database and dump in the blank tables, via `make install` or `make install-db`.  It'll also 
+The app will `createdb ca` to create a new database and dump in the blank tables, via `make install` or `make install-db`.
 
     make
     make install

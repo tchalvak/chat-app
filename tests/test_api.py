@@ -43,15 +43,38 @@ class TestApi:
     def test_root_url_config_works(self):
         ''' Ensure root is configured '''
         assert (self.api_root() is not None and
-                len(str(self.root())) > 5)
+                len(str(self.api_root())) > 5)
 
 
-    def test_api_urls(self):
+    def test_api_get_urls(self):
+        ''' Test that the api urls return json 
+        and the right status code'''
         root = self.api_root()
         endpoints = ['chats', 'chats/1']
         for endpoint in endpoints:
+            status = self.status_code(root+endpoint)
             data = self.pull_json(root, endpoint)
-            assert (data is not None and 
+            assert (root+endpoint and status in [200, 201] and
+                    data is not None and 
                     json.loads(data) is not False and
                     len(json.loads(data)) > 0
                     )
+
+'''
+    def post_json(url, endpoint, json):
+         Post information to an endpoint to create a chat 
+        test_chat = 
+
+    def test_api_post_chat(self):
+        root = self.api_root()
+        endpoints = ['chats']
+        for endpoint in endpoints:
+            status = self.status_code(root+endpoint)
+            data = self.pull_json(root, endpoint)
+            assert (root+endpoint and status in [200, 201] and
+                    data is not None and 
+                    json.loads(data) is not False and
+                    len(json.loads(data)) > 0
+                    )
+
+'''

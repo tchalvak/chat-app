@@ -2,3 +2,4 @@
 unclean/
 CONFIG
 flask/
+.cache

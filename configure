@@ -1,4 +1,15 @@
 echo "DOMAIN=http://chat.local/" >> CONFIG
 echo "DB=ca" >> CONFIG
 echo "API_DOMAIN=http://api.chat.local/" >> CONFIG
-echo "API_BASE=/chat/api/v1.0/" >> CONFIG
+echo "API_BASE=chat/api/v1.0/" >> CONFIG
+
+echo "Don't forget to set up your nginx local site!
+
+Something like:
+cd /etc/nginx/sites-available/
+ln -s /srv/chat-app/conf/chat.local
+cd ../sites-enables
+ln -s ../sites-available/chat.local
+
+You'll also need to add chat.local and api.chat.local to your localhost entry in /etc/hosts, I don't want to mess with your hosts
+file, so I leave that to you!"

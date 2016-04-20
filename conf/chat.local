@@ -1,11 +1,13 @@
 server {
-    listen 80;
-    server_name api.chat.local;
+	listen 80;
+	server_name api.chat.local;
 
-    location / {
-        include uwsgi_params;
-        uwsgi_pass unix:/srv/chat-app/conf/chat-app.sock;
-    }
+	location / {
+		proxy_pass http://localhost:5000;
+		proxy_set_header Host $host;
+		#include uwsgi_params;
+		#uwsgi_pass unix:/srv/chat-app/conf/chat-app.sock;
+	}
 }
 
 server {
@@ -21,10 +23,10 @@ server {
 
 	# Just use generic nginx error pages for now
 	location = /50x.html {
-	    root /usr/share/nginx/html;
+		root /usr/share/nginx/html;
 	}
 
-    location = /favicon.ico {
+	location = /favicon.ico {
 		try_files /dev_favicon.ico =404;
 	}
 
@@ -43,28 +45,8 @@ server {
 		index index.html;
 	}
 
-	location /api {
-        include uwsgi_params;
-        uwsgi_pass unix:/srv/chat-app/conf/chatapp_uwsgi.sock;
-	}
-
-	location /chat {
-        include uwsgi_params;
-        uwsgi_pass unix:/srv/chat-app/conf/chatapp_uwsgi.sock;
-	}
-
 	location / {
 		#default fallback of everything else block
-		try_files $uri @uwsgi;
-	}
-
-	location @uwsgi {
-	}
-
-	location @php {
-		fastcgi_param PHP_VALUE "session.cookie_domain=chat.local \n date.timezone=America/New_York \n default_charset=UTF-8 \n";
-		fastcgi_pass unix:/var/run/php5-fpm.sock;
-		fastcgi_param SCRIPT_FILENAME $document_root/front.php;
-		include fastcgi_params;
+		try_files $uri =404;
 	}
 }

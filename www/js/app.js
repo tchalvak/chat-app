@@ -36,7 +36,7 @@ chat.error = function(errorText){
 // Pull the chats since a point in time
 chat.update = function(since){
   // Get chats since a certain point in time.
-  chat.api('chats/' + (since? '?since='+since : ''), function(data){
+  chat.api('chats' + (since? '?since='+since : ''), function(data){
     chat.append(data); // Append the latest chats.
   });
   return new Date().getTime(); // Return updated latest
