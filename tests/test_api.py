@@ -54,27 +54,42 @@ class TestApi:
         for endpoint in endpoints:
             status = self.status_code(root+endpoint)
             data = self.pull_json(root, endpoint)
-            assert (root+endpoint and status in [200, 201] and
-                    data is not None and 
-                    json.loads(data) is not False and
-                    len(json.loads(data)) > 0
-                    )
+            assert (root+endpoint and status in [200, 201])
+            assert (root+endpoint and data is not None)
+            #Assert not html starting with <, otherwise report the endpoint
+            assert (root+endpoint and data and data[:1] is not '<')
+            assert(root+endpoint and json.loads(data) is not False)
+            assert (len(json.loads(data)) > 0)
+
+    def post_data(self, url, endpoint, data):
+        ''' Post information to an endpoint to create a chat '''
+        return requests.get(url+endpoint, data=data)
+
+    def test_simple_post(self):
+        ''' just create a new chat without any bells and whistles '''
+        new_chat = {
+                'username':u'Test',
+                'chat':u'A simple test chat'
+            }
+        res = self.post_data(self.api_root(), 'chats', new_chat);
+        assert(res is not None and
+            res.json() is not False and
+            len(res.json()) > 0
+            )
 
 '''
-    def post_json(url, endpoint, json):
-         Post information to an endpoint to create a chat 
-        test_chat = 
-
     def test_api_post_chat(self):
+        #Test posting to the chat create endpoint
         root = self.api_root()
-        endpoints = ['chats']
-        for endpoint in endpoints:
-            status = self.status_code(root+endpoint)
-            data = self.pull_json(root, endpoint)
+        new_chat = 
+        endpoints = {
+            'chats':new_chat
+            }
+        for endpoint, data in endpoints:
+            data = self.post_data(root, endpoint, data)
             assert (root+endpoint and status in [200, 201] and
                     data is not None and 
                     json.loads(data) is not False and
                     len(json.loads(data)) > 0
                     )
-
 '''

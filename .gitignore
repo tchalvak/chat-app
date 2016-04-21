@@ -3,3 +3,4 @@ unclean/
 CONFIG
 flask/
 .cache
+tests/__pycache__/

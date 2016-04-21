@@ -382,6 +382,14 @@ body {
     list-style-type:none;
 }
 
+.chat-output ul li{
+    text-align:left;
+}
+
+.chat-output p{
+    display:inline;
+}
+
 .chat-output .username, .chat-input-area .username{
     font-weight:bold;color:#42dca3;
 }
@@ -393,7 +401,12 @@ body {
     margin-right:1rem;
 }
 
-.chat-output.jumbotron{
+.chat-output{
     background-color:rgba(30, 30, 30, 0.7);
     margin-top:3rem;
+    padding:2rem;
+    border-radius:1rem;
+}
+.chat-output:empty{
+    margin:0;
 }

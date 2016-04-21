@@ -1,10 +1,11 @@
 #!flask/bin/python
-from datetime import timedelta
 from flask import Flask, jsonify, abort, make_response, request, url_for, current_app
 from flask.ext.httpauth import HTTPBasicAuth
 from functools import update_wrapper
+from datetime import timedelta
 from datetime import datetime
 from dateutil import parser
+import pdb
 
 ''' Simple Flask REST API
     Sample urls:
@@ -47,12 +48,10 @@ def crossdomain(origin=None, methods=None, headers=None,
                 return resp
 
             h = resp.headers
+
             h['Access-Control-Allow-Origin'] = origin
             h['Access-Control-Allow-Methods'] = get_methods()
             h['Access-Control-Max-Age'] = str(max_age)
-            h['Access-Control-Allow-Credentials'] = 'true'
-            h['Access-Control-Allow-Headers'] = \
-                "Origin, X-Requested-With, Content-Type, Accept, Authorization"
             if headers is not None:
                 h['Access-Control-Allow-Headers'] = headers
             return resp
@@ -77,7 +76,7 @@ chats = [
     {
         'id': 2,
         'username':u'Bob',
-        'chat': u'We\'ve seeded the chat with a few initial chats so you can see what to expect.',
+        'chat': u'We\'ve seeded the chat so you can see what to expect.',
         'date_created': u'2016-04-19 17:58:33'
     }
 ]
@@ -95,7 +94,7 @@ def unauthorized():
     #Return 403 to prevent browsers from url prompting on unauth.
     return make_response(jsonify({'error': 'Unauthorized access'}), 403)
 
-@app.route('/chat/api/v1.0/chats', methods=['GET', 'OPTIONS'])
+@app.route('/chat/api/v1.0/chats', methods=['GET'])
 @crossdomain(origin='*')
 def get_chats():
     since = request.args.get('since')
@@ -113,18 +112,23 @@ def not_found(error):
 
 @app.route('/chat/api/v1.0/chats', methods=['POST'])
 @crossdomain(origin='*')
-#@auth.login_required
 def create_chat():
-    if not request.json or not 'chat' in request.json:
+    #if not request.json or not 'chat' in request.json:
+    #    abort(400)
+    # todo don't trust username
+    # todo require non-blank chat
+    if not request.json:
+        abort(418)
+    if not 'chat' in request.json:
         abort(400)
     chat = {
         'id': chats[-1]['id'] + 1,
-        'username':request.json['username'],
         'chat':request.json.get('chat', ''),
+        'username': request.json.get('username'),
         'date_created': datetime.date.today().strftime('%Y-%m-%d %H:%M:%S')
     }
     chats.append(chat)
-    return jsonify({'chat': chat}), 201
+    return jsonify({'chat': chat}), 201    
 
 @app.route('/chat/api/v1.0/chats/<int:chat_id>', methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')

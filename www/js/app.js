@@ -48,13 +48,13 @@ chat.append = function(data){
   // Loop through the chat data
   var chats = [];
   $.each( data.chats, function( key, val ) {
-    chats.push( "<li><strong id='chat-" + key + "' class='username'>" + val.username + "</strong><p>" + val.chat + "</p></li>" );
+    chats.pushOut( "<li><strong id='chat-" + key + "' class='username'>" + val.username + "</strong><p>" + val.chat + "</p></li>" );
   });
 
   $('.chat-output-list').append($(chats.join('')));
 };
 
-chat.push = function(author, pass, text){
+chat.pushOut = function(author, pass, text){
   var nwChat = 
   jQuery.post(baseApi+'chats', function(){
     chat.clear(); // Clear upon success
@@ -104,7 +104,7 @@ jQuery(function($){
   })();
   $(chatForm).submit(function(e){
     // author, pass, text
-    chat.push('someAuthor', 'pass', $(chatInput).val());
+    chat.pushOut('someAuthor', 'pass', $(chatInput).val());
     e.preventDefault();
   });
 });

@@ -4,7 +4,7 @@
 deps: install
 	#Just run full install until sudo is needed for install
 
-install: install-db
+install:
 	@git pull --ff-only
 	@virtualenv flask
 	@flask/bin/pip install flask
