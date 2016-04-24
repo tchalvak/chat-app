@@ -2,8 +2,12 @@ server {
 	listen 80;
 	server_name api.chat.local;
 
+    location = /favicon.ico {
+        try_files /dev_favicon.ico =404;
+    }
+
 	location / {
-		proxy_pass http://localhost:5000;
+		proxy_pass http://localhost:5566;
 		proxy_set_header Host $host;
 		#include uwsgi_params;
 		#uwsgi_pass unix:/srv/chat-app/conf/chat-app.sock;
