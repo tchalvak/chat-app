@@ -6,6 +6,8 @@ var chat = chat || {};
 var chatForm = '#chat-input-form';
 var chatInput = '#chat-input-form input[name=chat]';
 
+// Written closely integrated with jQuery, today I would recommend react
+
 // Initialized lastUpdated for checking for new chats.
 chat.lastUpdated = chat.lastUpdated || null;
 
