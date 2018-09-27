@@ -1,4 +1,4 @@
-var apiDomain = 'http://api.chat.local/'
+var apiDomain = 'http://api.kchat.local/'
 var apiVersion = 'chat/api/v1.0/';
 var baseApi = apiDomain + apiVersion;
 var chat = chat || {};
@@ -6,7 +6,16 @@ var chat = chat || {};
 var chatForm = '#chat-input-form';
 var chatInput = '#chat-input-form input[name=chat]';
 
-// Written closely integrated with jQuery, today I would recommend react
+/*
+
+Written closely integrated with jQuery, today I would recommend react
+
+Test api urls:
+    http://api.kchat.local/chat/api/v1.0/chats
+    http://api.kchat.local/chat/api/v1.0/chats/1
+    http://api.kchat.local/chat/api/v1.0/chats via post to create
+
+*/
 
 // Initialized lastUpdated for checking for new chats.
 chat.lastUpdated = chat.lastUpdated || null;

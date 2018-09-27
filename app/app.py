@@ -1,6 +1,6 @@
 #!flask/bin/python
 from flask import Flask, jsonify, abort, make_response, request, url_for, current_app
-from flask.ext.httpauth import HTTPBasicAuth
+from flask_httpauth import HTTPBasicAuth
 from functools import update_wrapper
 from datetime import timedelta
 from datetime import datetime
@@ -9,9 +9,9 @@ import pdb
 
 ''' Simple Flask REST API
     Sample urls:
-    http://api.chat.local/chat/api/v1.0/chats
-    http://api.chat.local/chat/api/v1.0/chats/1
-    http://api.chat.local/chat/api/v1.0/chats via post to create
+    http://api.kchat.local/chat/api/v1.0/chats
+    http://api.kchat.local/chat/api/v1.0/chats/1
+    http://api.kchat.local/chat/api/v1.0/chats via post to create
 '''
 
 ''' Convert datetime string to object for comparisons '''
