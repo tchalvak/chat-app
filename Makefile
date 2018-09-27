@@ -13,8 +13,12 @@ install:
 	@flask/bin/pip install pytest
 	#pip install uwsgi
 	chmod ug+x app/app.py
+	echo "python version was python3 during development. You are now running:"
+	python3 --version
 
 run:
+	echo "python version was python3 during development. You are now running:"
+	python3 --version
 	./app/app.py
 
 install-db:
