@@ -1,7 +1,7 @@
 atomicwrites==1.2.1
 attrs==18.2.0
 Click==7.0
-Flask==1.0.2
+Flask==2.3.2
 Flask-HTTPAuth==3.2.4
 funcsigs==1.0.2
 itsdangerous==0.24
